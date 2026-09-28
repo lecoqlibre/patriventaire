@@ -125,7 +125,7 @@ class AjouterElementViewTests(MediaTestCase):
 		self.assertEqual(Element.objects.count(), 1)
 		self.assertEqual(Photographie.objects.count(), 1)
 
-	def test_creation_sends_links_and_prefills_next_form(self) -> None:
+	def test_creation_sends_confirmation_email_and_prefills_next_form(self) -> None:
 		data = form_data(
 			**{
 				"photographies-TOTAL_FORMS": "1",
@@ -145,17 +145,16 @@ class AjouterElementViewTests(MediaTestCase):
 			fetch_redirect_response=False,
 		)
 		self.assertEqual(len(mail.outbox), 1)
+		self.assertEqual(
+			mail.outbox[0].subject,
+			"Merci pour votre contribution à l'inventaire patrimonial",
+		)
 		self.assertIn(
 			reverse("element:consulter", kwargs={"numero": element.numero}),
 			mail.outbox[0].body,
 		)
-		self.assertIn(
-			reverse(
-				"element:modifier",
-				kwargs={"jeton_ecriture": element.jeton_ecriture},
-			),
-			mail.outbox[0].body,
-		)
+		self.assertNotIn("Modifier la fiche", mail.outbox[0].body)
+		self.assertNotIn(element.jeton_ecriture, mail.outbox[0].body)
 
 		follow_up = self.client.get(response.url)
 

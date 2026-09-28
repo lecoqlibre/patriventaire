@@ -32,7 +32,7 @@ def ajouter_element(request: HttpRequest) -> HttpResponse:
 			_send_confirmation_email(request, element)
 			messages.success(
 				request,
-				"L'élément a bien été ajouté. Un mail de confirmation a été envoyé."
+				"L'élément a bien été ajouté. Il sera examiné par nos équipes et publié sur la carte après validation."
 			)
 			request.session["element_form_initial"] = {
 				"nom_deposant": element.nom_deposant,
@@ -114,18 +114,11 @@ def _send_confirmation_email(request: HttpRequest, element: Element) -> None:
 	read_url = request.build_absolute_uri(
 		reverse("element:consulter", kwargs={"numero": element.numero})
 	)
-	edit_url = request.build_absolute_uri(
-		reverse(
-			"element:modifier",
-			kwargs={"jeton_ecriture": element.jeton_ecriture},
-		)
-	)
 	send_mail(
-		subject="Votre élément de patrimoine a bien été enregistré",
+		subject="Merci pour votre contribution à l'inventaire patrimonial",
 		message=(
-			f"Merci pour votre contribution.\n\n"
-			f"Consulter la fiche : {read_url}\n"
-			f"Modifier la fiche : {edit_url}"
+			f"Merci pour votre contribution.\n\nElle sera examinée par nos équipes et publiée sur la carte après validation.\n\n"
+			f"Consulter la fiche : {read_url}"
 		),
 		from_email=None,
 		recipient_list=[element.courriel_deposant],
