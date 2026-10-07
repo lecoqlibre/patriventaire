@@ -13,7 +13,7 @@ ne doit pas être ajouté au dépôt.
 Créez `.env` avec les variables suivantes :
 
 ```dotenv
-POSTGRES_HOST=patriventaire-database
+POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_USER=patriventaire
 POSTGRES_PASSWORD=mot-de-passe
