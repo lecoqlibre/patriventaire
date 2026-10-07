@@ -1,4 +1,9 @@
-from django.contrib import admin
+from typing import Any
+
+from django.contrib import admin, messages
+from django.core.exceptions import PermissionDenied
+from django.http import Http404, HttpRequest, HttpResponse
+from django.shortcuts import redirect
 from django.utils.html import format_html
 
 from .models import Categorie, Commune, Element, Photographie
@@ -23,6 +28,7 @@ class ElementAdmin(admin.ModelAdmin):
 		"commune",
 		"nom_deposant",
 		"is_valide",
+		"validation_action",
 		"date_ajout",
 	)
 	list_display_links = ("numero", "libelle")
@@ -40,6 +46,39 @@ class ElementAdmin(admin.ModelAdmin):
 	list_select_related = ("categorie",)
 	date_hierarchy = "date_ajout"
 	ordering = ("-date_ajout",)
+
+	def changelist_view(
+		self,
+		request: HttpRequest,
+		extra_context: dict[str, Any] | None = None,
+	) -> HttpResponse:
+		if request.method == "POST" and "_validate_element" in request.POST:
+			if not self.has_change_permission(request):
+				raise PermissionDenied
+
+			element = self.get_object(request, request.POST["_validate_element"])
+			if element is None:
+				raise Http404
+			if not self.has_change_permission(request, element):
+				raise PermissionDenied
+
+			if not element.is_valide:
+				element.is_valide = True
+				element.save(update_fields=("is_valide",))
+				messages.success(request, f"L'élément « {element.libelle} » a été validé.")
+			return redirect(request.get_full_path())
+
+		return super().changelist_view(request, extra_context)
+
+	@admin.display(description="Action")
+	def validation_action(self, element: Element) -> str:
+		if element.is_valide:
+			return ""
+		return format_html(
+			'<button type="submit" class="button" name="_validate_element" '
+			'value="{}">Valider</button>',
+			element.pk,
+		)
 
 
 @admin.register(Categorie)
