@@ -72,6 +72,10 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.RunPython(migrate_element_categories, migrations.RunPython.noop),
+        migrations.RemoveIndex(
+            model_name='element',
+            name='element_categorie_idx',
+        ),
         migrations.RemoveField(
             model_name='element',
             name='categorie',
@@ -90,5 +94,9 @@ class Migration(migrations.Migration):
                 to='element.categorie',
                 verbose_name='catégorie',
             ),
+        ),
+        migrations.AddIndex(
+            model_name='element',
+            index=models.Index(fields=['categorie'], name='element_categorie_idx'),
         ),
     ]

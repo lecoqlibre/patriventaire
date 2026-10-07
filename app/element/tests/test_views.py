@@ -160,7 +160,7 @@ class AjouterElementViewTests(MediaTestCase):
 
 		self.assertContains(
 			follow_up,
-			"L'élément a bien été ajouté. Un mail de confirmation a été envoyé.",
+			"L'élément a bien été ajouté. Il sera examiné par nos équipes et publié sur la carte après validation.",
 			html=True,
 		)
 		self.assertContains(follow_up, 'value="Alex Martin"')
