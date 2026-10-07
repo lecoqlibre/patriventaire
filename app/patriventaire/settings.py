@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/6.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,8 +25,15 @@ SECRET_KEY = 'django-insecure-q87!!&6f-3ha9jz)b@2mv8s(xn$j@pu86nuphxn)okp9f=f-#)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# To allow external hosts, especially on production.
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
 
+# See https://docs.djangoproject.com/en/6.1/ref/csrf/ for more information on CSRF.
+csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip() for origin in csrf_origins.split(',') 
+    if origin.strip()
+]
 
 # Application definition
 
