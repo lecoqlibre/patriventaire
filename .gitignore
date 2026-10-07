@@ -3,3 +3,4 @@ app/media/
 .venv/
 __pycache__/
 *.pyc
+medias/
