@@ -1,6 +1,7 @@
 """Tests for the element views."""
 
 from django.core import mail
+from django.test import override_settings
 from django.urls import reverse
 
 from ..models import Element, Photographie
@@ -8,6 +9,19 @@ from .utils import MediaTestCase, element_data, form_data, image_upload
 
 
 class AjouterElementViewTests(MediaTestCase):
+	@override_settings(DEBUG=False)
+	def test_unknown_url_displays_custom_not_found_page(self) -> None:
+		response = self.client.get("/chemin-introuvable/")
+
+		self.assertEqual(response.status_code, 404)
+		self.assertTemplateUsed(response, "404.html")
+		self.assertContains(
+			response,
+			"Erreur 404 : vous êtes perdus dans les chemins du Val d'Orne...",
+			status_code=404,
+		)
+		self.assertContains(response, "Retrouver la carte", status_code=404)
+
 	def test_map_page_is_displayed(self) -> None:
 		response = self.client.get(reverse("element:carte"))
 
