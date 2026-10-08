@@ -114,16 +114,19 @@ def _send_confirmation_email(request: HttpRequest, element: Element) -> None:
 	read_url = request.build_absolute_uri(
 		reverse("element:consulter", kwargs={"numero": element.numero})
 	)
-	send_mail(
-		subject="Merci pour votre contribution à l'inventaire patrimonial",
-		message=(
-			f"Merci pour votre contribution.\n\nElle sera examinée par nos équipes et publiée sur la carte après validation.\n\n"
-			f"Consulter la fiche : {read_url}"
-		),
-		from_email=None,
-		recipient_list=[element.courriel_deposant],
-		fail_silently=False,
-	)
+	try:
+		send_mail(
+			subject="Merci pour votre contribution à l'inventaire patrimonial",
+			message=(
+				f"Merci pour votre contribution.\n\nElle sera examinée par nos équipes et publiée sur la carte après validation.\n\n"
+				f"Consulter la fiche : {read_url}"
+			),
+			from_email=None,
+			recipient_list=[element.courriel_deposant],
+			fail_silently=False,
+		)
+	except:
+		pass
 
 
 def _map_elements_data() -> list[dict[str, Any]]:
