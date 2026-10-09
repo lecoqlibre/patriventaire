@@ -2,7 +2,7 @@ services:
   patriventaire:
     build: .
     image: patriventaire
-    command: ["granian", "patriventaire.wsgi:application", "--interface", "wsgi", "--host", "0.0.0.0"]
+    command: ["granian", "patriventaire.wsgi:application", "--interface", "wsgi", "--host", "0.0.0.0", "--port", "80"]
     container_name: patriventaire
     env_file:
       - .env
@@ -14,7 +14,7 @@ services:
     depends_on:
       - patriventaire-database
     ports:
-      - "8000:8000"
+      - "80:80"
     restart: unless-stopped
   patriventaire-database:
     image: postgres:18-alpine

@@ -48,6 +48,10 @@ fournisseur SMTP. `EMAIL_USE_TLS=True` est généralement utilisé avec le port
 465. En l'absence de `EMAIL_HOST`, les mails sont affichés dans la console
 pour faciliter le développement.
 
+### Administration Django
+
+Pour créer un administrateur de Django, utilisez la commande `python manage.py createsuperuser`.
+
 ## Développement
 
 ### Avec Docker
@@ -62,7 +66,7 @@ Docker va créér l'image `patriventaire` si elle n'existe pas et déployer un s
 L'application est déployée avec le serveur interne de Django utilisable seulement en développement.
 
 Lors du premier démarrage et pour appliquer de nouveaux changements, éxecuter les migrations Django :
-`docker compose exec patriventaire python manage.py migrate`.
+`docker exec patriventaire python manage.py migrate`.
 
 Les photos téléversées par les utilisateurs sont stockées dans le dossier medias sur la machine hôte.
 
@@ -72,10 +76,27 @@ Voir https://docs.djangoproject.com/en/6.1/howto/deployment/.
 
 ### Avec Docker
 
-Pour l'hôte de base de données dans le fichier `.env` utilisez le nom du service Docker de la base de données : `POSTGRES_HOST=patriventaire-database`
+Pour l'hôte de base de données dans le fichier `.env` utilisez le nom du service Docker de la base de données : `POSTGRES_HOST=patriventaire-database`.
+
+Configurez la variable d'environnement `DJANGO_ALLOWED_HOSTS` pour autoriser les connexions externes. Par exemple :
+```
+nomdedomaine.extension,
+www.nomdedomaine.extension,
+patriventaire,
+localhost,
+127.0.0.1,
+```
+
+Configurez la variable d'environnement `CSRF_TRUSTED_ORIGINS` par exemple :
+`CSRF_TRUSTED_ORIGINS=https://nomdedomaine.extension,https://www.nomdedomaine.extension`. Voir https://docs.djangoproject.com/en/6.1/ref/csrf/ pour plus d'information sur la protection "Cross Site Request Forgery".
 
 Déployez les conteneurs avec :
 `docker compose up -d`
+
+Lors du premier démarrage et pour appliquer de nouveaux changements, éxecuter les migrations Django :
+`docker exec patriventaire python manage.py migrate`.
+
+Créez un super utilisateur avec `docker exec -it patriventaire python manage.py createsuperuser`.
 
 Le serveur utilisé est Granian, voir https://github.com/emmett-framework/granian.
 

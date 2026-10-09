@@ -11,7 +11,7 @@ services:
     depends_on:
       - patriventaire-database
     ports:
-      - "8000:8000"
+      - "8000:80"
     restart: unless-stopped
   patriventaire-database:
     image: postgres:18-alpine

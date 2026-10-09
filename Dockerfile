@@ -28,6 +28,6 @@ COPY ./app .
 # We collect the static files for serving.
 RUN python manage.py collectstatic --noinput
 
-# We expose the Django internal web server on port 8000
+# We expose the Django internal web server on port 80
 # for development only!
-EXPOSE 8000
+EXPOSE 80
