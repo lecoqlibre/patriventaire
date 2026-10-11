@@ -6,9 +6,6 @@ services:
     container_name: patriventaire
     env_file:
       - .env
-    environment:
-      - GRANIAN_STATIC_PATH_ROUTE=/static
-      - GRANIAN_STATIC_PATH_MOUNT=./staticfiles
     volumes:
       - media:/usr/src/app/media
     depends_on:

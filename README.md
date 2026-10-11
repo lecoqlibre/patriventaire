@@ -79,7 +79,7 @@ Voir https://docs.djangoproject.com/en/6.1/howto/deployment/.
 Pour l'hôte de base de données dans le fichier `.env` utilisez le nom du service Docker de la base de données : `POSTGRES_HOST=patriventaire-database`.
 
 Configurez la variable d'environnement `DJANGO_ALLOWED_HOSTS` pour autoriser les connexions externes. Par exemple :
-```
+```dotenv
 nomdedomaine.extension,
 www.nomdedomaine.extension,
 patriventaire,
@@ -88,7 +88,13 @@ localhost,
 ```
 
 Configurez la variable d'environnement `CSRF_TRUSTED_ORIGINS` par exemple :
-`CSRF_TRUSTED_ORIGINS=https://nomdedomaine.extension,https://www.nomdedomaine.extension`. Voir https://docs.djangoproject.com/en/6.1/ref/csrf/ pour plus d'information sur la protection "Cross Site Request Forgery".
+`CSRF_TRUSTED_ORIGINS=https://nomdedomaine.extension,https://www.nomdedomaine.extension`. Voir  ["Cross Site Request Forgery"](https://docs.djangoproject.com/en/6.1/ref/csrf/) sur la documentation de Django.
+
+Le serveur utilisé est [Granian](https://github.com/emmett-framework/granian). Il sert aussi les fichiers statiques. Configurez les variables d'environnement de Granian pour servir les fichiers statiques :
+```dotenv
+GRANIAN_STATIC_PATH_ROUTE=/static
+GRANIAN_STATIC_PATH_MOUNT=./staticfiles
+```
 
 Déployez les conteneurs avec :
 `docker compose up -d`
@@ -98,9 +104,7 @@ Lors du premier démarrage et pour appliquer de nouveaux changements, éxecuter 
 
 Créez un super utilisateur avec `docker exec -it patriventaire python manage.py createsuperuser`.
 
-Le serveur utilisé est Granian, voir https://github.com/emmett-framework/granian.
 
-Les fichiers statiques sont servis également par Granian.
 
 Les volumes dockers à sauvegarder sont :
 - `patriventaire_postgres-18` : base de données PosgreSQL.
