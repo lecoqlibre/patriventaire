@@ -4,3 +4,4 @@ app/media/
 __pycache__/
 *.pyc
 medias/
+docker-compose.yml
