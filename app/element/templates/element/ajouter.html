@@ -33,6 +33,10 @@
         <div class="mb-4">
             <h2 class="h5">Localiser l'élément</h2>
             <p class="text-secondary">Cliquez sur la carte pour renseigner les coordonnées GPS.</p>
+            <button id="geolocate-button" class="btn btn-outline-primary mb-2" type="button" aria-label="Me localiser" title="Me localiser">
+                📍
+            </button>
+            <p id="geolocation-status" class="text-secondary small mb-2" role="status" aria-live="polite"></p>
             <div id="map-widget" data-latitude-input="id_latitude" data-longitude-input="id_longitude"></div>
             {{ existing_elements|json_script:"existing-elements-data" }}
         </div>
@@ -295,6 +299,9 @@
                         map: null,
                         marker: null,
                         syncInputsHandler: null,
+                        geolocateButton: null,
+                        geolocationStatus: null,
+                        geolocateHandler: null,
                     };
                 },
 
@@ -341,6 +348,10 @@
                     this.map.on("click", (event) => {
                         this.setPosition(event.latlng.lat, event.latlng.lng);
                     });
+                    this.geolocateButton = document.getElementById("geolocate-button");
+                    this.geolocationStatus = document.getElementById("geolocation-status");
+                    this.geolocateHandler = () => this.locateUser();
+                    this.geolocateButton.addEventListener("click", this.geolocateHandler);
                     this.syncInputsHandler = () => this.syncFromInputs();
                     latitudeInput.addEventListener("input", this.syncInputsHandler);
                     longitudeInput.addEventListener("input", this.syncInputsHandler);
@@ -348,11 +359,43 @@
                 beforeUnmount() {
                     latitudeInput.removeEventListener("input", this.syncInputsHandler);
                     longitudeInput.removeEventListener("input", this.syncInputsHandler);
+                    this.geolocateButton.removeEventListener("click", this.geolocateHandler);
                     if (this.map) {
                         this.map.remove();
                     }
                 },
                 methods: {
+                    locateUser() {
+                        if (!navigator.geolocation) {
+                            this.geolocationStatus.textContent = window.isSecureContext
+                                ? "La géolocalisation n'est pas disponible sur cet appareil."
+                                : "La géolocalisation nécessite une connexion sécurisée (HTTPS).";
+                            return;
+                        }
+
+                        this.geolocateButton.disabled = true;
+                        this.geolocationStatus.textContent = "Recherche de votre position…";
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                const { latitude, longitude } = position.coords;
+                                this.setPosition(latitude, longitude);
+                                this.map.flyTo([latitude, longitude], 16);
+                                this.geolocationStatus.textContent = "Position trouvée. Vérifiez le marqueur avant l'envoi.";
+                                this.geolocateButton.disabled = false;
+                            },
+                            (error) => {
+                                const errorMessages = {
+                                    1: "Accès à la position refusé. Autorisez la géolocalisation dans votre navigateur.",
+                                    2: "Votre position est indisponible. Vérifiez les réglages de localisation de votre appareil.",
+                                    3: "La recherche de votre position a expiré. Réessayez.",
+                                };
+                                this.geolocationStatus.textContent = errorMessages[error.code]
+                                    || "Impossible de déterminer votre position. Réessayez.";
+                                this.geolocateButton.disabled = false;
+                            },
+                            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                        );
+                    },
                     setPosition(latitude, longitude) {
                         this.latitude = Number(latitude.toFixed(6));
                         this.longitude = Number(longitude.toFixed(6));
