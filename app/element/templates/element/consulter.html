@@ -9,7 +9,6 @@
         <p>Commune : {{ element.commune }}</p>
         <p>Coordonnées : {{ element.latitude }}, {{ element.longitude }}</p>
         <p>{{ element.description }}</p>
-        {% if element.histoire %}<p>{{ element.histoire }}</p>{% endif %}
         <h2>Photographies</h2>
         {% for photographie in element.photographies.all %}
             <figure>

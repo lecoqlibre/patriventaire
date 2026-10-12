@@ -26,7 +26,6 @@ class ElementAdmin(admin.ModelAdmin):
 		"libelle",
 		"categorie",
 		"commune",
-		"nom_deposant",
 		"is_valide",
 		"validation_action",
 		"date_ajout",
@@ -35,11 +34,8 @@ class ElementAdmin(admin.ModelAdmin):
 	list_filter = ("is_valide", "categorie", "commune", "date_ajout")
 	search_fields = (
 		"libelle",
-		"nom_deposant",
 		"courriel_deposant",
-		"telephone_deposant",
 		"description",
-		"histoire",
 	)
 	readonly_fields = ("numero", "jeton_ecriture", "date_ajout")
 	inlines = (PhotographieInline,)
@@ -116,7 +112,7 @@ class PhotographieAdmin(admin.ModelAdmin):
 	"""Admin interface for standalone photograph management."""
 
 	list_display = ("thumbnail", "id", "element", "fichier")
-	search_fields = ("element__libelle", "element__nom_deposant")
+	search_fields = ("element__libelle",)
 	list_select_related = ("element",)
 
 	@admin.display(description="aperçu")

@@ -46,19 +46,15 @@ class ElementForm(forms.ModelForm):
 		fields = (
 			"website",
 			"libelle",
-			"nom_deposant",
 			"courriel_deposant",
-			"telephone_deposant",
 			"categorie",
 			"commune",
 			"latitude",
 			"longitude",
 			"description",
-			"histoire",
 		)
 		widgets = {
 			"description": forms.Textarea(attrs={"rows": 5}),
-			"histoire": forms.Textarea(attrs={"rows": 4}),
 			"latitude": forms.NumberInput(attrs={"step": "0.000001"}),
 			"longitude": forms.NumberInput(attrs={"step": "0.000001"}),
 		}

@@ -35,9 +35,7 @@ def ajouter_element(request: HttpRequest) -> HttpResponse:
 				"L'élément a bien été ajouté. Il sera examiné par nos équipes et publié sur la carte après validation."
 			)
 			request.session["element_form_initial"] = {
-				"nom_deposant": element.nom_deposant,
 				"courriel_deposant": element.courriel_deposant,
-				"telephone_deposant": element.telephone_deposant,
 				"commune": element.commune_id,
 			}
 			return redirect("element:ajouter")

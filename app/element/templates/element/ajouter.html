@@ -20,8 +20,8 @@
 
         <div class="row g-3 deposant-fields">
             {% for field in element_form %}
-                {% if field.name == "nom_deposant" or field.name == "courriel_deposant" or field.name == "telephone_deposant" %}
-                    <p class="col-12 col-md-4 mb-0">
+                {% if field.name == "courriel_deposant" %}
+                    <p class="col-12 mb-0">
                         {{ field.label_tag }}
                         {{ field }}
                         {{ field.errors }}
@@ -41,7 +41,7 @@
         {{ element_form.longitude.as_hidden }}
 
         {% for field in element_form %}
-            {% if field.name == "categorie" or field.name == "commune" or field.name == "description" or field.name == "histoire" %}
+            {% if field.name == "categorie" or field.name == "commune" or field.name == "description" %}
                 <p>
                     {{ field.label_tag }}
                     {{ field }}

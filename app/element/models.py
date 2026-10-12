@@ -44,18 +44,9 @@ class Element(models.Model):
 		max_length=255,
 		verbose_name="Nom de l'élément",
 	)
-	nom_deposant: str = models.CharField(
-		max_length=255,
-		verbose_name="Votre nom",
-	)
 	courriel_deposant: str = models.EmailField(
 		blank=True,
 		verbose_name="Votre courriel",
-	)
-	telephone_deposant: str = models.CharField(
-		max_length=30,
-		blank=True,
-		verbose_name="Votre téléphone",
 	)
 	categorie: "Categorie" = models.ForeignKey(
 		"Categorie",
@@ -83,10 +74,6 @@ class Element(models.Model):
 	)
 	description: str = models.TextField(
 		verbose_name="description",
-	)
-	histoire: str = models.TextField(
-		blank=True,
-		verbose_name="histoire ou anecdote",
 	)
 	date_ajout: datetime = models.DateTimeField(
 		auto_now_add=True,

@@ -17,7 +17,6 @@ class ElementFormTests(MediaTestCase):
 		self.assertFalse(form.is_valid())
 		for field_name in (
 			"libelle",
-			"nom_deposant",
 			"categorie",
 			"commune",
 			"latitude",
@@ -26,15 +25,17 @@ class ElementFormTests(MediaTestCase):
 		):
 			self.assertIn(field_name, form.errors)
 
-	def test_form_accepts_blank_optional_contact_and_history(self) -> None:
-		data = form_data(
-			courriel_deposant="",
-			telephone_deposant="",
-			histoire="",
-		)
+	def test_form_accepts_blank_optional_email(self) -> None:
+		data = form_data(courriel_deposant="")
 		form = ElementForm(data=data)
 
 		self.assertTrue(form.is_valid(), form.errors)
+
+	def test_form_does_not_expose_removed_fields(self) -> None:
+		form = ElementForm()
+
+		self.assertNotIn("nom_deposant", form.fields)
+		self.assertNotIn("histoire", form.fields)
 
 	def test_form_rejects_a_filled_honeypot(self) -> None:
 		form = ElementForm(data=form_data(website="https://spam.example"))

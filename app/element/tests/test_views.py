@@ -79,7 +79,7 @@ class AjouterElementViewTests(MediaTestCase):
 		self.assertContains(response, "🧼 Lavoir")
 		self.assertContains(response, 'class="btn btn-primary"')
 		self.assertContains(response, 'class="row g-3 deposant-fields"')
-		self.assertContains(response, 'class="col-12 col-md-4 mb-0"')
+		self.assertContains(response, 'class="col-12 mb-0"')
 		self.assertContains(response, 'class="honeypot-field"')
 		self.assertContains(response, 'id="camera-button"')
 		self.assertContains(response, 'id="camera-viewfinder"')
@@ -177,9 +177,7 @@ class AjouterElementViewTests(MediaTestCase):
 			"L'élément a bien été ajouté. Il sera examiné par nos équipes et publié sur la carte après validation.",
 			html=True,
 		)
-		self.assertContains(follow_up, 'value="Alex Martin"')
 		self.assertContains(follow_up, 'value="alex@example.com"')
-		self.assertContains(follow_up, 'value="0600000000"')
 		self.assertContains(follow_up, 'value="7" selected')
 
 	def test_element_can_be_viewed_by_number_and_edited_by_token(self) -> None:

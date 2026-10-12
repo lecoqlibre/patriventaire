@@ -27,15 +27,12 @@ class MediaTestCase(TestCase):
 def element_data(**extra: object) -> dict[str, object]:
 	data = {
 		"libelle": "Ancien lavoir",
-		"nom_deposant": "Alex Martin",
 		"courriel_deposant": "alex@example.com",
-		"telephone_deposant": "0600000000",
 		"categorie": Categorie.objects.get(libelle="Lavoir"),
 		"commune": Commune.objects.get(libelle="Rabodanges"),
 		"latitude": 48.75,
 		"longitude": -0.25,
 		"description": "Un ancien lavoir communal.",
-		"histoire": "Construit au XIXe siècle.",
 	}
 	data.update(extra)
 	return data
@@ -44,15 +41,12 @@ def element_data(**extra: object) -> dict[str, object]:
 def form_data(**extra: str) -> dict[str, str]:
 	data = {
 		"libelle": "Ancien lavoir",
-		"nom_deposant": "Alex Martin",
 		"courriel_deposant": "alex@example.com",
-		"telephone_deposant": "0600000000",
 		"categorie": Categorie.objects.get(libelle="Lavoir").pk,
 		"commune": Commune.objects.get(libelle="Rabodanges").pk,
 		"latitude": "48.750000",
 		"longitude": "-0.250000",
 		"description": "Un ancien lavoir communal.",
-		"histoire": "Construit au XIXe siècle.",
 	}
 	data.update(extra)
 	return data
