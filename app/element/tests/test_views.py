@@ -86,9 +86,9 @@ class AjouterElementViewTests(MediaTestCase):
 		self.assertContains(response, 'class="col-12 mb-0"')
 		self.assertContains(response, 'class="honeypot-field"')
 		self.assertContains(response, 'id="camera-button"')
-		self.assertContains(response, 'id="camera-viewfinder"')
 		self.assertContains(response, 'capture="environment"')
-		self.assertContains(response, "webcamjs/1.0.26/webcam.min.js")
+		self.assertNotContains(response, 'id="camera-viewfinder"')
+		self.assertNotContains(response, "webcamjs")
 
 	def test_map_contains_existing_public_elements(self) -> None:
 		element = Element.objects.create(**element_data(is_valide=True))
