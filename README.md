@@ -88,12 +88,20 @@ localhost,
 ```
 
 Configurez la variable d'environnement `CSRF_TRUSTED_ORIGINS` par exemple :
-`CSRF_TRUSTED_ORIGINS=https://nomdedomaine.extension,https://www.nomdedomaine.extension`. Voir  ["Cross Site Request Forgery"](https://docs.djangoproject.com/en/6.1/ref/csrf/) sur la documentation de Django.
+```dotenv
+CSRF_TRUSTED_ORIGINS=https://nomdedomaine.extension,https://www.nomdedomaine.extension
+```
+Voir  ["Cross Site Request Forgery"](https://docs.djangoproject.com/en/6.1/ref/csrf/) sur la documentation de Django.
 
 Le serveur utilisé est [Granian](https://github.com/emmett-framework/granian). Il sert aussi les fichiers statiques. Configurez les variables d'environnement de Granian pour servir les fichiers statiques :
 ```dotenv
 GRANIAN_STATIC_PATH_ROUTE=/static
 GRANIAN_STATIC_PATH_MOUNT=./staticfiles
+```
+
+Désactivez le mode DEBUG dans le *.env*:
+```dotenv
+DJANGO_DEBUG=False
 ```
 
 Déployez les conteneurs avec :
